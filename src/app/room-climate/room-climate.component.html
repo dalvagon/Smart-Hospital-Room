@@ -1,5 +1,17 @@
+<div class="room-climate-date">{{ roomClimateData?.time | date: 'dd.MM.yyyy' }}</div>
+
 <div class="room-climate-data">
-  <div class="room-climate-date">{{ roomClimateData?.time | date: 'dd.MM.yyyy, HH:mm' }}</div>
-  <div class="room-climate-temperature">{{ roomClimateData?.temperature }}°C</div>
-  <div class="room-climate-humidity">{{ roomClimateData?.humidity }}%</div>
+
+  <div class="room-climate-time">{{ roomClimateData?.time | date: 'HH:mm:ss' }}
+    <i *ngIf="alert" class="pi pi-exclamation-circle" [ngStyle]="{'color' : temperatureColor}"></i>
+  </div>
+  <div class="room-climate-temperature">
+    Temperature
+    <span [ngStyle]="{'color' : temperatureColor}">{{
+      roomClimateData?.temperature
+      }}°C
+    </span>
+  </div>
+  <div class="room-climate-humidity">Humidity <span [ngStyle]="{'color' : humidityColor}">{{ roomClimateData?.humidity
+      }}%</span></div>
 </div>

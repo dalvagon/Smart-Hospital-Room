@@ -1,0 +1,35 @@
+* {
+    color: white;
+}
+
+.room-climate-data {
+    width: 500px;
+    margin: auto;
+    margin-top: 10px;
+    height: fit-content;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+.room-climate-data span {
+    font-size: 100px;
+}
+
+.room-climate-time {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.room-climate-time>* {
+    margin-left: 5px;
+}
+
+.room-climate-temperature,
+.room-climate-humidity {
+    margin: 10px;
+}

@@ -2,37 +2,33 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = 3000;
-const { execute, getAllTemperatures, getAllHumidity } = require("./functions");
+const { getLatest, getTemperatureHistory, getHumidityHistory } = require("./functions");
 
 app.use(cors());
 
-app.get("/api/data", async (req, res) => {
-  let response = await execute()
-  console.log(response);
+app.get("/api/latests", async (req, res) => {
+  let response = await getLatest()
   res.send(response);
 });
 
-app.get("/api/gettemp", async (req, res) => {
-  const response = await getAllTemperatures()
+app.get("/api/temperature/history", async (req, res) => {
+  const response = await getTemperatureHistory()
     .then((response) => {
-      console.log(response);
       res.send(response);
     })
-    .catch((response) => {
-      console.log("error");
-      res.send("eroare");
+    .catch((err) => {
+      res.send(err);
     });
 });
 
-app.get("/api/gethum", async (req, res) => {
-  const response = await getAllHumidity()
+app.get("/api/humidity/history", async (req, res) => {
+  const response = await getHumidityHistory()
     .then((response) => {
       console.log(response);
       res.send(response);
     })
-    .catch((response) => {
-      console.log("error");
-      res.send("eroare");
+    .catch((err) => {
+      res.send(err);
     });
 });
 

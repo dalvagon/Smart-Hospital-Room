@@ -6,12 +6,15 @@
     <i *ngIf="alert" class="pi pi-exclamation-circle" [ngStyle]="{'color' : temperatureColor}"></i>
   </div>
   <div class="room-climate-temperature">
-    Temperature
+    <small>Temperature</small>
     <span [ngStyle]="{'color' : temperatureColor}">{{
       roomClimateData?.temperature
       }}°C
     </span>
   </div>
-  <div class="room-climate-humidity">Humidity <span [ngStyle]="{'color' : humidityColor}">{{ roomClimateData?.humidity
-      }}%</span></div>
+  <div class="room-climate-humidity">
+    <small>Humidity</small>
+    <span [ngStyle]="{'color' : humidityColor}">{{ roomClimateData?.humidity
+      }}%</span>
+  </div>
 </div>

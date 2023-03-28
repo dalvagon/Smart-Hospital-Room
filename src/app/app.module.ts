@@ -9,12 +9,20 @@ import { RoomClimateComponent } from './room-climate/room-climate.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
+import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
+import { GraphsComponent } from './graphs/graphs.component';
+import { LandingComponent } from './landing/landing.component';
+var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
+
 @NgModule({
   declarations: [
     AppComponent,
+    CanvasJSChart,
     ContentLayoutComponent,
     NavbarComponent,
     RoomClimateComponent,
+    GraphsComponent,
+    LandingComponent,
   ],
   imports: [
     BrowserModule,

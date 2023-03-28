@@ -7,10 +7,10 @@ const pool = createPool({
   database: "temphum",
 });
 
-async function execute() {
+async function getLatest() {
   return new Promise((resolve, reject) => {
     pool.query(
-      `select temperature,humidity,recordtime from temphum.data where recordtime = (select max(recordtime) from temphum.data)`,
+      `select temperature, humidity, recordtime from data where recordtime = (select max(recordtime) from data)`,
       async (err, res) => {
         query_response = res[0];
         const data = {
@@ -18,23 +18,23 @@ async function execute() {
           humidity: query_response.humidity,
           time: query_response.recordtime,
         };
-        console.log(data);
+
         resolve(data);
       }
     );
   });
 }
 
-
-async function getAllTemperatures() {
+async function getTemperatureHistory() {
   return new Promise((resolve, reject) => {
     pool.query(
-      `select temperature from temphum.data`,
+      `select temperature, recordtime from temphum.data order by recordtime limit 200`,
       async (err, res) => {
         query_response = res;
-        let data=[]
+        let data = []
         query_response.forEach(element => {
-            data.push(element.temperature)
+          console.log(element)
+          data.push({ temperature: parseFloat(element.temperature), date: element.recordtime })
         });
 
         resolve(data);
@@ -43,16 +43,15 @@ async function getAllTemperatures() {
   });
 }
 
-
-async function getAllHumidity() {
+async function getHumidityHistory() {
   return new Promise((resolve, reject) => {
     pool.query(
       `select humidity from temphum.data`,
       async (err, res) => {
         query_response = res;
-        let data=[]
+        let data = []
         query_response.forEach(element => {
-            data.push(element.humidity)
+          data.push({ humidity: element.humidity })
         });
 
         resolve(data);
@@ -60,10 +59,9 @@ async function getAllHumidity() {
     );
   });
 }
-// Close the database connection
 
 module.exports = {
-  execute,
-  getAllTemperatures,
-  getAllHumidity,
+  getLatest,
+  getTemperatureHistory,
+  getHumidityHistory,
 };

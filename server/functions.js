@@ -24,8 +24,46 @@ async function execute() {
     );
   });
 }
+
+
+async function getAllTemperatures() {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `select temperature from temphum.data`,
+      async (err, res) => {
+        query_response = res;
+        let data=[]
+        query_response.forEach(element => {
+            data.push(element.temperature)
+        });
+
+        resolve(data);
+      }
+    );
+  });
+}
+
+
+async function getAllHumidity() {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `select humidity from temphum.data`,
+      async (err, res) => {
+        query_response = res;
+        let data=[]
+        query_response.forEach(element => {
+            data.push(element.humidity)
+        });
+
+        resolve(data);
+      }
+    );
+  });
+}
 // Close the database connection
 
 module.exports = {
   execute,
+  getAllTemperatures,
+  getAllHumidity,
 };

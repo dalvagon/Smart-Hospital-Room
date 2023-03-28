@@ -7,13 +7,7 @@ const { execute, getAllTemperatures, getAllHumidity } = require("./functions");
 app.use(cors());
 
 app.get("/api/data", async (req, res) => {
-  let response = await execute().then((response)=>{
-    console.log(response);
-    res.send(response);
-  }).catch((response)=>{
-    console.log("error")
-    res.send("eroare")
-  })
+  let response = await execute()
   console.log(response);
   res.send(response);
 });

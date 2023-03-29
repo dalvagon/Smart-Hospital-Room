@@ -6,7 +6,7 @@ const { getLatest, getTemperatureHistory, getHumidityHistory } = require("./func
 
 app.use(cors());
 
-app.get("/api/latests", async (req, res) => {
+app.get("/api/latest", async (req, res) => {
   let response = await getLatest()
   res.send(response);
 });
@@ -24,7 +24,6 @@ app.get("/api/temperature/history", async (req, res) => {
 app.get("/api/humidity/history", async (req, res) => {
   const response = await getHumidityHistory()
     .then((response) => {
-      console.log(response);
       res.send(response);
     })
     .catch((err) => {

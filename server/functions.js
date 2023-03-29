@@ -28,12 +28,11 @@ async function getLatest() {
 async function getTemperatureHistory() {
   return new Promise((resolve, reject) => {
     pool.query(
-      `select temperature, recordtime from temphum.data order by recordtime limit 200`,
+      `select * from (select * from data order by recordtime desc limit 200) as latest order by recordtime;`,
       async (err, res) => {
         query_response = res;
         let data = []
         query_response.forEach(element => {
-          console.log(element)
           data.push({ temperature: parseFloat(element.temperature), date: element.recordtime })
         });
 
@@ -46,12 +45,12 @@ async function getTemperatureHistory() {
 async function getHumidityHistory() {
   return new Promise((resolve, reject) => {
     pool.query(
-      `select humidity from temphum.data`,
+      `select * from (select * from data order by recordtime desc limit 200) as latest order by recordtime;`,
       async (err, res) => {
         query_response = res;
         let data = []
         query_response.forEach(element => {
-          data.push({ humidity: element.humidity })
+          data.push({ humidity: parseFloat(element.humidity), date: element.recordtime })
         });
 
         resolve(data);

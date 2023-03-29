@@ -3,19 +3,27 @@ from databaseop import database_update
 import time
 import uuid
 import datetime
+from perlin_noise import PerlinNoise
+
+noise = PerlinNoise()
+toff = rand.randint(0, 100)
+hoff = rand.randint(0, 100)
 
 
-def generate_one_data():
-    temperature = round(rand.uniform(20, 35), 2)
-    humidity = round(rand.uniform(30, 70), 2)
+def getClimate():
+    global toff
+    global hoff
+    toff += 0.1
+    hoff += 0.1
+    temperature = round((noise(toff) + 1) * 10 + 15, 2)
+    humidity = round((noise(hoff) + 1) * 25 + 20, 2)
     return temperature, humidity
 
 
-def generate_data_contant():
+def generateData():
     while 1:
-        temperature, humidity = generate_one_data()
+        temperature, humidity = getClimate()
         id = str(uuid.uuid4())
-        print(id)
         generated_time = datetime.datetime.now()
         sql_query = "insert into data values ('%s','%s','%s','%s')" % (
             id,
@@ -30,4 +38,4 @@ def generate_data_contant():
 
 
 if __name__ == "__main__":
-    generate_data_contant()
+    generateData()

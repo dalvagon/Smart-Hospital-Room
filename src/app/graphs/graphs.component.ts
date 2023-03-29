@@ -9,7 +9,8 @@ import { first } from 'rxjs';
 })
 export class GraphsComponent implements AfterViewInit {
   temperatureHistory: any = [];
-  chartOptions = {
+  humidityHistory: any = [];
+  temperatureChartOptions = {
     theme: 'dark2',
     zoomEnabled: true,
     exportEnabled: true,
@@ -36,12 +37,44 @@ export class GraphsComponent implements AfterViewInit {
       },
     ],
   };
-  chart: any;
+  humidityChartOptions = {
+    theme: 'dark2',
+    zoomEnabled: true,
+    exportEnabled: true,
+    title: {
+      text: 'Humidity History',
+    },
+    subtitles: [
+      {
+        text: 'Loading Data...',
+        fontSize: 24,
+        horizontalAlign: 'center',
+        verticalAlign: 'center',
+        dockInsidePlotArea: true,
+      },
+    ],
+    axisY: {
+      title: 'Humidity',
+    },
+    data: [
+      {
+        type: 'line',
+        xValueFormatString: 'DDD MMM hh:mm',
+        dataPoints: this.humidityHistory,
+      },
+    ],
+  };
+  temperatureChart: any;
+  humidityChart: any;
 
   constructor(private environmentService: EnvironmentService) {}
 
-  getChartInstance(chart: object) {
-    this.chart = chart;
+  getTemperatureChart(chart: object) {
+    this.temperatureChart = chart;
+  }
+
+  getHumidityChart(chart: object) {
+    this.humidityChart = chart;
   }
 
   ngAfterViewInit(): void {
@@ -57,7 +90,23 @@ export class GraphsComponent implements AfterViewInit {
             y: Number(data[i].temperature),
           });
         }
-        this.chart.subtitles[0].remove();
+        this.temperatureChart.subtitles[0].remove();
+      });
+
+    this.environmentService
+
+      .getHumidityHistory()
+      .pipe(first())
+      .subscribe((response) => {
+        let data = response;
+        for (let i = 0; i < data.length; i++) {
+          let date = new Date(data[i].date);
+          this.humidityHistory.push({
+            x: date,
+            y: Number(data[i].humidity),
+          });
+        }
+        this.humidityChart.subtitles[0].remove();
       });
   }
 }

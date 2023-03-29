@@ -1,4 +1,11 @@
-<div>
-    <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'360px'}"
-        (chartInstance)="getChartInstance($event)"></canvasjs-chart>
+<div class="charts">
+    <div class="chart">
+        <canvasjs-chart [options]="temperatureChartOptions" [styles]="{width: '100%', height:'360px'}"
+            (chartInstance)="getTemperatureChart($event)"></canvasjs-chart>
+    </div>
+
+    <div class="chart">
+        <canvasjs-chart [options]="humidityChartOptions" [styles]="{width: '100%', height:'360px'}"
+            (chartInstance)="getHumidityChart($event)"></canvasjs-chart>
+    </div>
 </div>

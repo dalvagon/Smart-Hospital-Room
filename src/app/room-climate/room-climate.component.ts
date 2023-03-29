@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { first, interval } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { first, interval, startWith } from 'rxjs';
 import { RoomClimateData } from '../data/schema/roomClimateData';
 import { EnvironmentService } from '../data/service/environment.service';
 
@@ -14,6 +14,10 @@ export class RoomClimateComponent implements OnInit {
   humidityColor: String | undefined;
   alert: boolean = false;
 
+  private MAX_TEMPERATURE = 25;
+  private MIN_HUMIDITY = 30;
+  private MAX_HUMIDITY = 60;
+
   constructor(private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
@@ -23,26 +27,26 @@ export class RoomClimateComponent implements OnInit {
       time: new Date(),
     };
 
-    this.temperatureColor =
-      this.roomClimateData.temperature > 30 ? 'red' : 'green';
-    this.humidityColor = this.roomClimateData.humidity > 60 ? 'red' : 'green';
-    this.alert =
-      this.roomClimateData.temperature > 30 ||
-      this.roomClimateData.humidity > 60;
-
-    interval(5000).subscribe(() =>
-      this.environmentService
-        .getRoomClimateData()
-        .pipe(first())
-        .subscribe((data) => {
-          this.roomClimateData = data;
-          this.temperatureColor = data.temperature > 30 ? 'red' : 'green';
-          this.humidityColor =
-            this.roomClimateData.humidity > 60 ? 'red' : 'green';
-          this.alert =
-            this.roomClimateData.temperature > 30 ||
-            this.roomClimateData.humidity > 60;
-        })
-    );
+    interval(5000)
+      .pipe(startWith(0))
+      .subscribe(() =>
+        this.environmentService
+          .getRoomClimateData()
+          .pipe(first())
+          .subscribe((data) => {
+            this.roomClimateData = data;
+            this.temperatureColor =
+              data.temperature > this.MAX_TEMPERATURE ? 'red' : 'green';
+            this.humidityColor =
+              data.humidity > this.MAX_HUMIDITY ||
+              data.humidity < this.MIN_HUMIDITY
+                ? 'red'
+                : 'green';
+            this.alert =
+              data.temperature > this.MAX_TEMPERATURE ||
+              data.humidity > this.MAX_HUMIDITY ||
+              data.humidity < this.MIN_HUMIDITY;
+          })
+      );
   }
 }
